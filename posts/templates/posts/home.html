@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>The homepage</h1>
+<a class="btn btn-primary" href="{% url 'posts:create' %}">New Post</a>
+
+<br />
+<br />
+
+{% for post in posts.all %}
+
+<table>
+  <tr>
+    <td style="padding-right: 20px;"><a href="#" onclick="document.getElementById('upvote{{ post.id }}').submit()"><i class="fas fa-arrow-circle-up"></i></a><br /> {{ post.votes_total }}<br /> <a href="#" onclick="document.getElementById('downvote{{ post.id }}').submit()"><i class="fas fa-arrow-circle-down"></i></a></td>
+    <td><a href="{{ post.url }}">{{ post.title }}</a><br />{{ post.pub_date_pretty }} by <a href="{% url 'posts:userdetails' post.author.id %}">{{ post.author.username }}</a></td>
+  </tr>
+</table>
+
+<form id="upvote{{ post.id }}" method="POST" action="{% url 'posts:upvote' post.id %}">
+  {% csrf_token %}
+  <input type="hidden" />
+
+</form>
+
+<form id="downvote{{ post.id }}" method="POST" action="{% url 'posts:downvote' post.id %}">
+  {% csrf_token %}
+  <input type="hidden" />
+
+</form>
+
+
+
+
+{% endfor %}
+
+{% endblock %}
